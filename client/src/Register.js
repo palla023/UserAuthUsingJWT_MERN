@@ -11,20 +11,29 @@ const Register = () => {
 	const changeHandler = e => {
 		setData({ ...data, [e.target.name]: e.target.value })
 	}
-	const submitHandler = e => {
+	 const submitHandler = async (e) => {
 		e.preventDefault();
-		axios.post('http://localhost:5000/register', data).then(
-			res => {	alert(res.data); 
-				setData({
-					username: '',
-					email: '',
-					password: '',
-					confirmpassword: ''
-				})
+		try {
+			await axios.post("http://localhost:5000/register", data).then((res) => {
+			alert(res.data);
+			setData({
+			username: "",
+			email: "",
+			password: "",
+			confirmpassword: "",
+			});
+			navigate('/login')
+			});
+		} catch (err) {
+			if (err.response) {
+				if (err.response.status === 400) {
+				alert(err.response.data); 
+				} else {
+				alert('Internal Server Error');
 			}
-		)
-
-	}
+			}
+			}
+		};
 	return (
 		<div>
 			<center>
