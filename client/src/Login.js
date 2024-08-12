@@ -2,9 +2,11 @@ import React, { useState, useContext } from 'react'
 import axios from 'axios';
 import { store } from './App';
 import { Navigate } from 'react-router';
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
-	const [token, setToken] = useContext(store)
+	const [token, setToken] = useContext(store);
+        let navigate = useNavigate();
 	const [data, setData] = useState({
 		email: '',
 		password: '',
@@ -16,7 +18,10 @@ const Login = () => {
 		try {
 			e.preventDefault();
 			await axios.post('http://localhost:5000/login', data).then(
-				res => setToken(res.data.token)
+				res => {
+					setToken(res.data.token);
+					navigate('/Myprofile')
+				}
 			)
 		} catch (err) {
 			if (err.response) {
@@ -28,9 +33,9 @@ const Login = () => {
 			}
 		}
 	}
-	if (token) {
-		return <Navigate to='/Myprofile' />
-	}
+	// if (token) {
+	// 	return <Navigate to='/Myprofile' />
+	// }
 	return (
 		<div>
 			<center>
